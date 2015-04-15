@@ -44,6 +44,16 @@ describe User do
     end
   end
 
+  describe "when email format is invalid" do
+    it "should be invalid with successive dot" do
+      addresses = %w[user@bar..com]
+      addresses.each do |invalid_address|
+        @user.email = invalid_address
+        expect(@user).not_to be_valid
+      end
+    end
+  end
+
   describe "when email format is valid" do
     it "should be valid" do
       addresses = %w[user@foo.COM A_US-ER@f.b.org frst.lst@foo.jp a+b@baz.cn]
