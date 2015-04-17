@@ -26,7 +26,7 @@ describe "Authentication" do
       
       describe "after visiting another page" do
         before { click_link "Home" }
-      it { should_not have_error_message('') }
+        it { should_not have_error_message('') }
       end
     end
 
@@ -56,9 +56,7 @@ describe "Authentication" do
       describe "when attempting to visit a protected page" do
         before do
           visit edit_user_path(user)
- fill_in "Email", with: user.email
- fill_in "Password", with: user.password
- click_button "Sign in"
+          sign_in user
         end
 
         describe "after signing in" do
@@ -84,6 +82,24 @@ describe "Authentication" do
         describe "visiting the user index" do
           before { visit users_path }
           it { should have_title('Sign in') }
+        end
+ 
+        describe "when attempting to visit a signup page" do
+          before do
+            sign_in user
+          end
+
+          describe "after signing in" do
+            describe "submitting the new action" do
+              before { visit new_user_path }
+              specify { expect(page.current_path).to eq root_path }
+            end
+
+            describe "submitting the create action" do
+              before { visit signup_path }
+              specify { expect(page.current_path).to eq root_path }
+            end
+          end
         end
       end
     end
